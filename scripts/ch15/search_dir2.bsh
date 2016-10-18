@@ -1,0 +1,2 @@
+#!/bin/bash
+/usr/bin/find $* -name "*.gz" -print0 | /usr/bin/xargs -0 -I {} /usr/bin/zgrep "base2" {}

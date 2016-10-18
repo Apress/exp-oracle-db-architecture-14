@@ -1,0 +1,100 @@
+
+SQL*Loader: Release 12.1.0.1.0 - Production on Thu Jul 24 08:35:10 2014
+
+Copyright (c) 1982, 2013, Oracle and/or its affiliates.  All rights reserved.
+
+Express Mode Load, Table: DEPT
+Data File:      dept.dat
+  Bad File:     dept_%p.bad
+  Discard File:  none specified
+ 
+ (Allow all discards)
+
+Number to load: ALL
+Number to skip: 0
+Errors allowed: 50
+Continuation:    none specified
+Path used:      External Table
+
+Table DEPT, loaded from every logical record.
+Insert option in effect for this table: APPEND
+
+   Column Name                  Position   Len  Term Encl Datatype
+------------------------------ ---------- ----- ---- ---- ---------------------
+DEPTNO                              FIRST     *   ,       CHARACTER            
+DNAME                                NEXT     *   ,       CHARACTER            
+LOC                                  NEXT     *   ,       CHARACTER            
+
+Generated control file for possible reuse:
+OPTIONS(EXTERNAL_TABLE=EXECUTE, TRIM=LRTRIM)
+LOAD DATA
+INFILE 'dept'
+APPEND
+INTO TABLE DEPT
+FIELDS TERMINATED BY ","
+(
+  DEPTNO,
+  DNAME,
+  LOC
+)
+End of generated control file for possible reuse.
+
+
+enable parallel DML: ALTER SESSION ENABLE PARALLEL DML
+
+creating external table "SYS_SQLLDR_X_EXT_DEPT"
+
+CREATE TABLE "SYS_SQLLDR_X_EXT_DEPT" 
+(
+  "DEPTNO" NUMBER(2),
+  "DNAME" VARCHAR2(14),
+  "LOC" VARCHAR2(13)
+)
+ORGANIZATION external 
+(
+  TYPE oracle_loader
+  DEFAULT DIRECTORY SYS_SQLLDR_XT_TMPDIR_00000
+  ACCESS PARAMETERS 
+  (
+    RECORDS DELIMITED BY NEWLINE CHARACTERSET US7ASCII
+    BADFILE 'SYS_SQLLDR_XT_TMPDIR_00000':'dept_%p.bad'
+    LOGFILE 'dept_%p.log_xt'
+    READSIZE 1048576
+    FIELDS TERMINATED BY "," LRTRIM 
+    REJECT ROWS WITH ALL NULL FIELDS 
+    (
+      "DEPTNO" CHAR(255),
+      "DNAME" CHAR(255),
+      "LOC" CHAR(255)
+    )
+  )
+  location 
+  (
+    'dept.dat'
+  )
+)REJECT LIMIT UNLIMITED
+
+executing INSERT statement to load database table DEPT
+
+INSERT /*+ append parallel(auto) */ INTO DEPT 
+(
+  DEPTNO,
+  DNAME,
+  LOC
+)
+SELECT 
+  "DEPTNO",
+  "DNAME",
+  "LOC"
+FROM "SYS_SQLLDR_X_EXT_DEPT"
+
+dropping external table "SYS_SQLLDR_X_EXT_DEPT"
+
+Table DEPT:
+  4 Rows successfully loaded.
+
+Run began on Thu Jul 24 08:35:10 2014
+Run ended on Thu Jul 24 08:35:11 2014
+
+Elapsed time was:     00:00:00.67
+CPU time was:         00:00:00.00

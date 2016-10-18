@@ -1,0 +1,2 @@
+#!/bin/bash
+/usr/bin/find $1 -ls|/bin/sort -nrk7|/usr/bin/head -10|/bin/awk '{print $11,$7}'
